@@ -1,13 +1,16 @@
 import React from 'react'
-import { Body, Container, ContainerCreateAccount, ContainerCreateAccountPress, HR, Icone, LineHR, Text, TextCenter, TextHR } from './styles'
+import { Body, Container, ContainerCreateAccount, ContainerCreateAccountPress, HR, LineHR, Text, TextCenter, TextHR } from './styles'
 import { Button } from '../../components/Button'
 import { ButtonGoogle } from '../../components/ButtonGoogle'
+import { HeaderIcon } from '../../components/HeaderIcon'
+import { useNavigation } from '@react-navigation/native'
 
-export function Login() {
+export function Login () {
+  const navigation = useNavigation()
   return (
     <Container>
-      <Icone />
       <Body>
+        <HeaderIcon />
         <TextCenter>Que bom ver você de novo! Entre na sua conta para ver o que há de mais recente.</TextCenter>
         <ButtonGoogle name='Continuar com Google' />
         <HR>
@@ -15,7 +18,7 @@ export function Login() {
           <TextHR>Ou</TextHR>
           <LineHR />
         </HR>
-        <Button name='Entrar' colorText='#FFF' onPress={() => console.log('kk')} />
+        <Button name='Entrar' colorText='#FFF' onPress={() => navigation.navigate('LoginUser')} />
       </Body>
       <ContainerCreateAccount>
         <Text>Não tem uma conta?</Text>

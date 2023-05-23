@@ -25,6 +25,7 @@ module.exports = {
     }
   },
   rules: {
-    // Coloque suas regras personalizadas aqui
+    'react-native/no-raw-text': 'off',
+    '@typescript-eslint/no-explicit-any': 'off'
   }
 }

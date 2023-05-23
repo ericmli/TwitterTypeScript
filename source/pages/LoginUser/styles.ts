@@ -1,6 +1,7 @@
 import styled from 'styled-components/native'
-export interface TitleProps {
+interface TitleProps {
   color?: string
+  state?: boolean
 }
 
 export const Container = styled.SafeAreaView`
@@ -15,39 +16,38 @@ export const Body = styled.View`
 `
 
 export const TextCenter = styled.Text`
-  margin-top: 40%;
+  margin-top: 5%;
   margin-bottom: 10%;
   color: ${(props) => props.theme.colors.colorText};
-  font-size: 30px;
-  font-weight: 700;
-`
-export const HR = styled.View`
-  width: 100%;
-  flex-direction: row;
-  justify-content: space-evenly;
-  align-items: center;
-`
-export const LineHR = styled.View`
-  width: 40%;
-  height: 0.5px;
-  background-color: grey;
-`
-export const TextHR = styled.Text`
-  font-size: 12px;
-  color: ${(props) => props.theme.colors.colorText};
+  font-size: 26px;
+  font-weight: 800;
 `
 export const Text = styled.Text<TitleProps>`
-  font-size: 12px;
+  font-size: 16px;
   color: ${(props) => props.color || props.theme.colors.colorText};
+  font-weight: 400;
 `
 
 export const ContainerCreateAccount = styled.View`
   flex-direction: row;
+  width: 90%;
   left: 5%;
   position: absolute;
   bottom: 2%;
-  gap: 4px;
+  justify-content: space-between;
+  align-items: center;
 `
 
-export const ContainerCreateAccountPress = styled.TouchableOpacity`
+export const ContainerCreateAccountPress = styled.TouchableOpacity<TitleProps>`
+  background: ${(props) => props.state ? props.theme.colors.invertColor : 'grey'};
+  justify-content: center;
+  border-radius: 30px;
+  height: 30px;
+  padding-left: 20px;
+  padding-right: 20px;
+`
+export const TextForgot = styled.Text`
+  font-size: 14px;
+  color: ${(props) => props.theme.colors.mainBg};
+  font-weight: 500;
 `
