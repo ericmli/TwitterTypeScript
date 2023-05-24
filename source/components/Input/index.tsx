@@ -1,25 +1,25 @@
 import React from 'react'
 import { View, TextInput, TextError } from './styles'
-import { Controller } from 'react-hook-form'
+import { Controller, Control } from 'react-hook-form'
 
 interface PropsInput {
-  name?: any
-  errors?: any
-  control?: any
+  name: string
+  control?: Control<any>
   placeholder?: string
   onSubmitEditing?: () => void
   keyboardType?: string
   message?: string
-  result: any
+  placeholderColor?: string
+  secureTextEntry?: boolean
 }
 
-export function Input ({ name, errors, control, onSubmitEditing, placeholder, result }: PropsInput) {
+export function Input ({ name, control, onSubmitEditing, placeholder, secureTextEntry }: PropsInput) {
   return (
     <View>
       <Controller
         name={name}
         control={control}
-        render={({ field: { onChange, onBlur, value } }) => {
+        render={({ field: { onChange, onBlur, value }, fieldState }) => {
           return (
             <>
               <TextInput
@@ -27,11 +27,12 @@ export function Input ({ name, errors, control, onSubmitEditing, placeholder, re
                 value={value}
                 onSubmitEditing={onSubmitEditing}
                 placeholderTextColor='#252525'
-                onChange={result(value)}
+                onChange={onChange}
                 onBlur={onBlur}
                 placeholder={placeholder}
+                secureTextEntry={secureTextEntry}
               />
-              {errors[name] && <TextError>{errors[name].message}</TextError>}
+              {fieldState.error && <TextError>{fieldState?.error?.message}</TextError>}
             </>
           )
         }}

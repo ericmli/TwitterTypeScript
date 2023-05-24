@@ -4,55 +4,68 @@ import { HeaderIcon } from '../../components/HeaderIcon'
 import { useNavigation } from '@react-navigation/native'
 import { Input } from '../../components/Input'
 import { useForm } from 'react-hook-form'
+import { api } from '../../services'
 
-interface LoginFormValues {
-  email: string
+export interface LoginFormValues {
+  user: string
+  password: string
 }
 
-export function LoginUser () {
+export function LoginUser() {
   const navigation = useNavigation()
-  const [passed, setPassed] = React.useState(false)
-
-  const { control, handleSubmit, formState: { errors } } = useForm<LoginFormValues>({
+  const [switchState, setSwitchState] = React.useState(false)
+  const { control, handleSubmit, watch } = useForm<LoginFormValues>({
     defaultValues: {
-      email: ''
+      user: '',
+      password: ''
     }
   })
 
+  const userChange = watch('user')
+  const passwordChange = watch('password')
   const onSubmit = async (input: LoginFormValues) => {
-    const obj = {
-      email: input.email
+    if (userChange.length > 0) {
+      if (passwordChange.length > 0) {
+        const obj = {
+          email: input.user,
+          password: input.password
+        }
+        try {
+          const response = await api.post('login', obj)
+          console.log(response.data)
+        } catch (e) {
+          console.log(e)
+        }
+      }
+      setSwitchState(true)
     }
-    console.log(obj)
   }
 
-  const result = (r: string) => {
-    recept(r)
-  }
-  function recept (i : string) {
-    if (i.length > 0) {
-      setPassed(true)
-    } else {
-      setPassed(false)
-    }
-  }
   return (
     <Container>
       <Body>
         <HeaderIcon text='Cancelar' onPress={() => navigation.goBack()} />
         <TextCenter>Para começar, informe telefone, e-mail ou @nomedeusuario</TextCenter>
+
         <Input
-          name="email"
+          name="user"
           placeholder='Celular, e-mail ou nome de usuário'
           control={control}
-          errors={errors}
-          result={result}
         />
+        {switchState &&
+          <Input
+            name="password"
+            placeholder='Senha'
+            control={control}
+            secureTextEntry={true}
+          />
+        }
+
       </Body>
 
       <ContainerCreateAccount>
         <Text>Esqueceu sua senha?</Text>
-        <ContainerCreateAccountPress state={passed} onPress={handleSubmit(onSubmit)}>
+        <ContainerCreateAccountPress state={userChange.length > 0} onPress={handleSubmit(onSubmit)}>
           <TextForgot>Avançar</TextForgot>
         </ContainerCreateAccountPress>
       </ContainerCreateAccount>

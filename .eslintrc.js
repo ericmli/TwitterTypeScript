@@ -26,6 +26,8 @@ module.exports = {
   },
   rules: {
     'react-native/no-raw-text': 'off',
-    '@typescript-eslint/no-explicit-any': 'off'
+    '@typescript-eslint/no-explicit-any': 'off',
+    'operator-linebreak': 'off',
+    'space-before-function-paren': 'off'
   }
 }

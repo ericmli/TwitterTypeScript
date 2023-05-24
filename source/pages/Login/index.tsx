@@ -5,7 +5,7 @@ import { ButtonGoogle } from '../../components/ButtonGoogle'
 import { HeaderIcon } from '../../components/HeaderIcon'
 import { useNavigation } from '@react-navigation/native'
 
-export function Login () {
+export function Login() {
   const navigation = useNavigation()
   return (
     <Container>
