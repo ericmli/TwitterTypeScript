@@ -5,6 +5,8 @@ import { useNavigation } from '@react-navigation/native'
 import { Input } from '../../components/Input'
 import { useForm } from 'react-hook-form'
 import { api } from '../../services'
+import { Alert } from 'react-native'
+import { AuthContext } from '../../context'
 
 export interface LoginFormValues {
   user: string
@@ -12,6 +14,7 @@ export interface LoginFormValues {
 }
 
 export function LoginUser() {
+  const { login } : any = React.useContext(AuthContext)
   const navigation = useNavigation()
   const [switchState, setSwitchState] = React.useState(false)
   const { control, handleSubmit, watch } = useForm<LoginFormValues>({
@@ -31,9 +34,14 @@ export function LoginUser() {
           password: input.password
         }
         try {
-          const response = await api.post('login', obj)
-          console.log(response.data)
+          const response = await api.post('auth/login', obj)
+          login(response.data.data)
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Home' }]
+          })
         } catch (e) {
+          Alert.alert('Erro', 'Senha incorreta.')
           console.log(e)
         }
       }

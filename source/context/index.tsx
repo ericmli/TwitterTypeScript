@@ -1,13 +1,9 @@
 import React, { createContext, useState, ReactNode } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { api } from '../services'
 
 type Token = {
   token: string
-  user: {
-    name: string
-    email: string
-    _id: string
-  }
 }
 
 type AuthContextProps = {
@@ -27,14 +23,21 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   async function login(token: Token) {
     setToken(token)
-    await AsyncStorage.setItem('token', token.token)
-    await AsyncStorage.setItem('name', token.user.name)
-    await AsyncStorage.setItem('email', token.user.email)
+    await AsyncStorage.setItem('@token', token.token)
+
+    if (token.token) {
+      const response = await api.get('auth/profile')
+
+      await AsyncStorage.setItem('@name', response.data.data.user.name)
+      await AsyncStorage.setItem('@email', response.data.data.user.email)
+      await AsyncStorage.setItem('@id', response.data.data.user._id)
+      await AsyncStorage.setItem('@nick', response.data.data.user.nickName)
+    }
   }
 
   async function logout() {
     setToken(null)
-    await AsyncStorage.removeItem('token')
+    await AsyncStorage.removeItem('@token')
   }
 
   return (
