@@ -7,14 +7,15 @@ import AuthProvider from './context'
 
 export default function App() {
   const deviceTheme = useColorScheme()
-  let statusBar = 'dark-content'
+  let statusBar: 'dark-content' | 'light-content' = 'dark-content'
   let themeSelected = {
     ...theme,
     ...colorsLight
   }
   if (deviceTheme === 'dark') {
     themeSelected = {
-      ...themeSelected, ...colorsDark
+      ...theme,
+      ...colorsDark
     }
     statusBar = 'light-content'
   }

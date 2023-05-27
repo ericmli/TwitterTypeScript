@@ -8,7 +8,7 @@ export const api = axios.create({
 })
 
 api.interceptors.request.use(
-  async ({ config }: any) => {
+  async (config : any) => {
     try {
       const data = await AsyncStorage.getItem('@token')
       if (data) {
