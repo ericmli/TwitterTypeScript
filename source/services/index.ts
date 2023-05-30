@@ -15,7 +15,7 @@ api.interceptors.request.use(
         config.headers.Authorization = `Bearer ${data}`
       }
       return config
-    } catch (e) {
-      console.log(e)
+    } catch (err) {
+      console.log(err)
     }
   })

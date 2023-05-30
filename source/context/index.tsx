@@ -24,10 +24,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   async function login(token: Token) {
     setToken(token)
     await AsyncStorage.setItem('@token', token.token)
-
     if (token.token) {
       const response = await api.get('auth/profile')
-
       await AsyncStorage.setItem('@name', response.data.data.user.name)
       await AsyncStorage.setItem('@email', response.data.data.user.email)
       await AsyncStorage.setItem('@id', response.data.data.user._id)

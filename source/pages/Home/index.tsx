@@ -1,19 +1,21 @@
 import React from 'react'
-import { Container, Text } from './styles'
+import { Container } from './styles'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { HeaderIcon } from '../../components/HeaderIcon'
+import { Title } from '../../components/Text'
 
-export function Home () {
-  React.useEffect(() => { getUser() })
+export function Home() {
   const [name, setName] = React.useState<string | null>('')
+
+  React.useEffect(() => { getUser() }, [])
   async function getUser() {
-    const namee = await AsyncStorage.getItem('@email')
-    setName(namee)
+    setName(await AsyncStorage.getItem('@email'))
+    console.log(await AsyncStorage.getItem('@email'))
   }
   return (
     <Container>
       <HeaderIcon />
-      <Text>AAA{name}</Text>
+      <Title size='medium' color='primary' text={`Nome: ${name}`} />
     </Container>
   )
 }

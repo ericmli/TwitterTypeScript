@@ -35,7 +35,7 @@ export function LoginUser() {
         }
         try {
           const response = await api.post('auth/login', obj)
-          login(response.data.data)
+          await login(response.data.data)
           navigation.reset({
             index: 0,
             routes: [{ name: 'Home' }]
