@@ -1,27 +1,27 @@
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { Home } from '../pages/Home'
 import { Login } from '../pages/Login'
 import { LoginUser } from '../pages/LoginUser'
+import { BottomTabs } from './bottom.routes'
 
 const Stack = createNativeStackNavigator()
 
-export default function StackNavigator () {
+export function StackNavigator () {
   return (
       <Stack.Navigator
-        initialRouteName='Login'>
+        initialRouteName='SendHome'>
         <Stack.Screen
-          name="Home"
-          component={Home}
+          name='SendHome'
+          component={BottomTabs}
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="Login"
+          name='Login'
           component={Login}
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="LoginUser"
+          name='LoginUser'
           component={LoginUser}
           options={{ headerShown: false }}
         />
