@@ -38,7 +38,7 @@ export function LoginUser() {
           await login(response.data.data)
           navigation.reset({
             index: 0,
-            routes: [{ name: 'Home' }]
+            routes: [{ name: 'SendHome' }]
           })
         } catch (e) {
           Alert.alert('Erro', 'Senha incorreta.')

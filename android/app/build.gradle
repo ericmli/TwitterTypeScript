@@ -15,8 +15,10 @@ project.ext.vectoricons = [
         'Foundation.ttf', // Foundation
         'Octicons.ttf', // Octicons
         'Zocial.ttf', // Zocial
-        'SimpleLineIcons.ttf' // SimpleLineIcons] // Name of the font files you want to copy
-]]
+        'SimpleLineIcons.ttf', // SimpleLineIcons] // Name of the font files you want to copy
+        'MaterialCommunityIcons.ttf'
+        ]
+]
 
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 import com.android.build.OutputFile

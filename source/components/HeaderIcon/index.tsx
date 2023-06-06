@@ -1,5 +1,6 @@
 import React from 'react'
-import { Button, Container, Icone, Text } from './styles'
+import { Button, Container, Icone } from './styles'
+import { Title } from '../Text'
 
 interface PropsHeaderIcon {
   text?: string
@@ -10,7 +11,7 @@ export function HeaderIcon({ text, onPress }: PropsHeaderIcon) {
   return (
     <Container>
       <Button onPress={onPress}>
-        <Text>{text}</Text>
+        <Title text={`${text || ''}`} color='invertColor' size='small'/>
       </Button>
       <Icone />
     </Container>
