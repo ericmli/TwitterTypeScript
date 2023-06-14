@@ -8,7 +8,7 @@ export interface TitleProps {
   marginRight?: | 'nano' | 'xnano' | 'xxnano' | 'small' | 'xsmall' | 'medium' | 'large' | 'xlarge' | 'xxlarge' | 'huge'
   marginBottom?: | 'nano' | 'xnano' | 'xxnano' | 'small' | 'xsmall' | 'medium' | 'large' | 'xlarge' | 'xxlarge' | 'huge'
   family?: 'light' | 'regular' | 'bold'
-  color?: 'primary' | 'secondary' | 'success' | 'error' | 'dark' | 'white' | 'grayDark' | 'title' | 'invertColor'
+  color?: 'primary' | 'secondary' | 'success' | 'error' | 'dark' | 'white' | 'grayDark' | 'title' | 'invertColor' | 'inputColor'
 }
 
 export function Title({ text, ...rest }: TitleProps) {
