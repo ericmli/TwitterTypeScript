@@ -8,7 +8,7 @@ export const TextInput = styled.TextInput`
   font-size: 14px;
   margin-top: 10px;
   margin-bottom: 10px;
-  height: ${(props) => props.multiline ? '90%' : '52px'};
+  height: ${(props) => props.multiline ? '85%' : '52px'};
   color: ${(props) => props.multiline ? props.theme.colors.invertColor : props.theme.colors.primary};
   text-align-vertical: top;
 `
