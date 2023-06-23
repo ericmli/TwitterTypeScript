@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native'
 
 export function Login() {
   const navigation = useNavigation()
+
   return (
     <Container>
       <Body>
@@ -22,7 +23,7 @@ export function Login() {
       </Body>
       <ContainerCreateAccount>
         <Text>Não tem uma conta?</Text>
-        <ContainerCreateAccountPress>
+        <ContainerCreateAccountPress onPress={() => navigation.navigate('Create')}>
           <Text color='#009EF7'>Inscreva-se</Text>
         </ContainerCreateAccountPress>
       </ContainerCreateAccount>

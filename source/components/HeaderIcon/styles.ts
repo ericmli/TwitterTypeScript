@@ -16,7 +16,7 @@ export const Icone = styled(SvgComponent)`
 
 export const Button = styled.TouchableOpacity`
   position: absolute;
-  left: 10px;
+  left: 0;
 `
 
 export const Text = styled.Text`

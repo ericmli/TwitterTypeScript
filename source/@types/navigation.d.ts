@@ -6,6 +6,8 @@ export declare global {
       Login: undefined;
       LoginUser: undefined;
       NewPost: undefined;
+      Create: undefined;
+      CreateUser: undefined;
     }
   }
 }

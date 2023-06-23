@@ -5,12 +5,13 @@ import { api } from '../../services'
 import { Title } from '../../components/Text'
 import { ListRenderItem } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
-
+import firestore from '@react-native-firebase/firestore'
 export interface PropsApi {
   _id: string
   textArea: string
   like: number
   liked: boolean
+  data: any
 }
 
 export function Home() {
@@ -23,9 +24,14 @@ export function Home() {
   )
 
   async function loadApi() {
-    const response = await api.get('posts')
-    setData(response.data.post)
-    console.log(response.data.post[2].comments)
+    const arr: PropsApi[] = []
+    await firestore().collection('Post').get().then((item) => {
+      item.forEach((data: any) => {
+        arr.push(data)
+      })
+    })
+    console.log(arr)
+    // setData(arr)
   }
   async function likePost(id: string, index: number) {
     const response = await api.post(`likes/post/${id}`, {})
@@ -51,8 +57,8 @@ export function Home() {
         <ContainerAccess>
           <ContainerAmount>
             {item.liked ?
-                <IconeEntypo name='heart' onPress={() => likePost(item._id, index)} />
-              : <Icone name='heart' onPress={() => likePost(item._id, index)} /> }
+              <IconeEntypo name='heart' onPress={() => likePost(item._id, index)} />
+              : <Icone name='heart' onPress={() => likePost(item._id, index)} />}
             <Title size='small' color='inputColor' text={String(item.like)} />
           </ContainerAmount>
           <ContainerAmount>
@@ -69,7 +75,7 @@ export function Home() {
       <Flat
         data={data}
         renderItem={renderItem}
-        keyExtractor={(item: any) => item._id}
+        keyExtractor={(item: PropsApi) => item._id}
         initialNumToRender={10}
       />
     </Container>

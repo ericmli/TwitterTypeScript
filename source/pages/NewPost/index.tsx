@@ -35,8 +35,7 @@ export function NewPost() {
         textArea: input.comment
       }
       try {
-        // api.post('posts', obj)
-        // navigation.goBack()
+        api.post('posts', obj)
         if (response) {
           const imageUri = response.assets[0].uri
           const imageType = response.assets[0].type
@@ -53,12 +52,12 @@ export function NewPost() {
             }
           })
         }
+        navigation.goBack()
       } catch (e) {
         console.log(e)
       }
     }
   }
-  // console.log(response)
   return (
     <Container>
       <Header>
@@ -84,7 +83,7 @@ export function NewPost() {
             <RemoveImage onPress={() => setResponse(null)}>
               <Title text={'X'} color='white' size='xxnano' />
             </RemoveImage>
-            <Image source={{ uri: response?.assets[0]?.uri }} onPress={() => console.log('kkk')} />
+            <Image source={{ uri: response?.assets[0]?.uri }}/>
           </>
         )}
 

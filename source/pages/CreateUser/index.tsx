@@ -1,5 +1,5 @@
 import React from 'react'
-import { Body, Container, ContainerCreateAccount, ContainerCreateAccountPress, Text, TextCenter, TextForgot } from './styles'
+import { Body, Container, ContainerCreateAccount, ContainerCreateAccountPress, TextCenter, TextForgot } from './styles'
 import { HeaderIcon } from '../../components/HeaderIcon'
 import { useNavigation } from '@react-navigation/native'
 import { Input } from '../../components/Input'
@@ -9,16 +9,17 @@ import { AuthContext } from '../../context'
 import auth from '@react-native-firebase/auth'
 
 export interface LoginFormValues {
+  nick: string
   user: string
   password: string
 }
 
-export function LoginUser() {
+export function CreateUser() {
   const { login }: any = React.useContext(AuthContext)
   const navigation = useNavigation()
-  const [switchState, setSwitchState] = React.useState(false)
   const { control, handleSubmit, watch } = useForm<LoginFormValues>({
     defaultValues: {
+      nick: '',
       user: '',
       password: ''
     }
@@ -33,10 +34,10 @@ export function LoginUser() {
           email: input.user,
           password: input.password
         }
-        auth().signInWithEmailAndPassword(obj.email, obj.password)
+        auth().createUserWithEmailAndPassword(obj.email, obj.password)
           .then((data) => {
             login(data.user)
-            // console.log('User account created & signed in!')
+            console.log('User account created & signed in!')
             // await login(response.data.data)
             // navigation.reset({
             //   index: 0,
@@ -44,11 +45,17 @@ export function LoginUser() {
             // })
           })
           .catch((e) => {
+            if (e.code === 'auth/email-already-in-use') {
+              console.log('That email address is already in use!')
+            }
+
+            if (e.code === 'auth/invalid-email') {
+              console.log('That email address is invalid!')
+            }
             Alert.alert('Erro', 'Senha incorreta.')
             console.log(e)
           })
       }
-      setSwitchState(true)
     }
   }
 
@@ -56,26 +63,30 @@ export function LoginUser() {
     <Container>
       <Body>
         <HeaderIcon text='Cancelar' onPress={() => navigation.goBack()} />
-        <TextCenter>Para começar, informe telefone, e-mail ou @nomedeusuario</TextCenter>
+        <TextCenter>Criar sua conta</TextCenter>
+
+        <Input
+          name="nick"
+          placeholder='Nome'
+          control={control}
+        />
 
         <Input
           name="user"
-          placeholder='Celular, e-mail ou nome de usuário'
+          placeholder='Celular ou e-mail'
           control={control}
         />
-        {switchState &&
-          <Input
-            name="password"
-            placeholder='Senha'
-            control={control}
-            secureTextEntry={true}
-          />
-        }
+
+        <Input
+          name="password"
+          placeholder='Senha'
+          control={control}
+          secureTextEntry={true}
+        />
 
       </Body>
 
       <ContainerCreateAccount>
-        <Text>Esqueceu sua senha?</Text>
         <ContainerCreateAccountPress state={userChange.length > 0} onPress={handleSubmit(onSubmit)}>
           <TextForgot>Avançar</TextForgot>
         </ContainerCreateAccountPress>

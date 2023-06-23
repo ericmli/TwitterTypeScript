@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "397235494032",
+    "project_id": "projeto-twitter-151d2",
+    "storage_bucket": "projeto-twitter-151d2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:397235494032:android:b4e9e6b9d59336dfb1cc15",
+        "android_client_info": {
+          "package_name": "com.bemtevi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "397235494032-e7etsa305in01md03q0fpsni30d3udga.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANYiMQ4kOb5GHtDD6P3EGYLSuLxhxVkiU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "397235494032-e7etsa305in01md03q0fpsni30d3udga.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
