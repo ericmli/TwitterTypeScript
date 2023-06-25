@@ -1,16 +1,17 @@
 import React from 'react'
 import { Active, Icone, Text } from './styles'
-// import auth from '@react-native-firebase/auth'
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin'
 import { AuthContext } from '../../context'
 import { useNavigation } from '@react-navigation/native'
+import firestore from '@react-native-firebase/firestore'
 
 interface ButtonGoogleProps {
   name?: string
+  create?: boolean
 }
 
-export function ButtonGoogle({ name }: ButtonGoogleProps) {
-  const { login } : any = React.useContext(AuthContext)
+export function ButtonGoogle({ name, create }: ButtonGoogleProps) {
+  const { login }: any = React.useContext(AuthContext)
   const navigation = useNavigation()
 
   React.useEffect(() => {
@@ -39,8 +40,21 @@ export function ButtonGoogle({ name }: ButtonGoogleProps) {
       }
     }
   }
+
+  async function pushLogin() {
+    const arr: ButtonGoogleProps[] = []
+    const userInfo = await GoogleSignin.signIn()
+    await firestore().collectionGroup('User').get().then((item) => {
+      item.forEach((data: any) => {
+        arr.push(data.id)
+      })
+    })
+    const compare = arr.indexOf('userInfo.idToken')
+    console.log(compare)
+  }
+
   return (
-    <Active onPress={() => onGoogleButtonPress()}>
+    <Active onPress={() => create ? onGoogleButtonPress() : pushLogin()}>
       <Icone />
       <Text>{name}</Text>
     </Active>

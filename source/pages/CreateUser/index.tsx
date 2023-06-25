@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native'
 import { Input } from '../../components/Input'
 import { useForm } from 'react-hook-form'
 import { Alert } from 'react-native'
-import { AuthContext } from '../../context'
+// import { AuthContext } from '../../context'
 import auth from '@react-native-firebase/auth'
 
 export interface LoginFormValues {
@@ -15,7 +15,7 @@ export interface LoginFormValues {
 }
 
 export function CreateUser() {
-  const { login }: any = React.useContext(AuthContext)
+  // const { login }: any = React.useContext(AuthContext)
   const navigation = useNavigation()
   const { control, handleSubmit, watch } = useForm<LoginFormValues>({
     defaultValues: {
@@ -31,13 +31,15 @@ export function CreateUser() {
     if (userChange.length > 0) {
       if (passwordChange.length > 0) {
         const obj = {
+          nick: input.nick,
           email: input.user,
           password: input.password
         }
         auth().createUserWithEmailAndPassword(obj.email, obj.password)
           .then((data) => {
-            login(data.user)
+            console.log(data.user)
             console.log('User account created & signed in!')
+
             // await login(response.data.data)
             // navigation.reset({
             //   index: 0,

@@ -1,5 +1,6 @@
 import React, { createContext, useState, ReactNode } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import firestore from '@react-native-firebase/firestore'
 import { api } from '../services'
 
 type Token = {
@@ -31,6 +32,11 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   async function login(token: Token) {
     setToken(token)
 
+    // function randomCode(size: number) {
+    //   const words = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-='
+    //   return Array.from({ length: size }, () => words[Math.floor(Math.random() * words.length)]).join('')
+    // }
+
     if (token.token) {
       const response = await api.get('auth/profile')
       setUsers({
@@ -41,15 +47,20 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         nick: response.data.data.user.nick
       })
     }
+
     if (token.idToken) {
-      setUsers({
-        token: token.idToken,
+      const obj = {
         name: token.user.name,
         email: token.user.email,
         id: token.user.id,
         nick: token.user.givenName,
         photo: token.user.photo
-      })
+      }
+      setUsers(obj)
+      firestore()
+        .collection('User')
+        .doc(token.idToken)
+        .set(obj)
     }
   }
 

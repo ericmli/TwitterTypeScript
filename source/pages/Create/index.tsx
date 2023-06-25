@@ -14,7 +14,7 @@ export function Create() {
       <Body>
         <HeaderIcon text='Cancelar' onPress={() => navigation.navigate('Login')}/>
         <TextCenter>Veja o que está acontecendo no mundo neste momento.</TextCenter>
-        <ButtonGoogle name='Continuar com Google' />
+        <ButtonGoogle create={true} name='Continuar com Google' />
         <HR>
           <LineHR />
           <Title size='xnano' color='invertColor' text='Ou' />
