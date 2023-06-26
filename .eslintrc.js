@@ -28,6 +28,8 @@ module.exports = {
     'react-native/no-raw-text': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     'operator-linebreak': 'off',
-    'space-before-function-paren': 'off'
+    'space-before-function-paren': 'off',
+    '@typescript-eslint/no-non-null-assertion': 'off',
+    'multiline-ternary': 'off'
   }
 }

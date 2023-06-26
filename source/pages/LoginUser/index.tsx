@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form'
 import { Alert } from 'react-native'
 import { AuthContext } from '../../context'
 import auth from '@react-native-firebase/auth'
+import firestore from '@react-native-firebase/firestore'
 
 export interface LoginFormValues {
   user: string
@@ -33,20 +34,21 @@ export function LoginUser() {
           email: input.user,
           password: input.password
         }
-        auth().signInWithEmailAndPassword(obj.email, obj.password)
-          .then((data) => {
-            login(data.user)
-            // console.log('User account created & signed in!')
-            // await login(response.data.data)
-            // navigation.reset({
-            //   index: 0,
-            //   routes: [{ name: 'SendHome' }]
-            // })
-          })
-          .catch((e) => {
-            Alert.alert('Erro', 'Senha incorreta.')
-            console.log(e)
-          })
+        try {
+          const data = await auth().signInWithEmailAndPassword(obj.email, obj.password)
+
+          const response = await firestore().collection('User').doc(data.user.uid).get()
+          if (response.exists) {
+            await login(response._data)
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'SendHome' }]
+            })
+          }
+        } catch (error) {
+          Alert.alert('Erro', 'Senha incorreta.')
+          console.log(error)
+        }
       }
       setSwitchState(true)
     }

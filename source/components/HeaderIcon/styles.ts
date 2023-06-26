@@ -25,6 +25,7 @@ export const Text = styled.Text`
 `
 
 export const ContainerImg = styled.View`
+  left: 5px;
   width: 100%;
   height: 100%;
 `
@@ -34,5 +35,5 @@ export const Img = styled.Image`
   height: 30px;
   border-width: 1px;
   border-radius: 50px;
-  object-fit: cover;
+  object-fit: contain;
 `

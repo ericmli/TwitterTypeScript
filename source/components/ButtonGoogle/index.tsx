@@ -42,15 +42,18 @@ export function ButtonGoogle({ name, create }: ButtonGoogleProps) {
   }
 
   async function pushLogin() {
-    const arr: ButtonGoogleProps[] = []
     const userInfo = await GoogleSignin.signIn()
-    await firestore().collectionGroup('User').get().then((item) => {
-      item.forEach((data: any) => {
-        arr.push(data.id)
+    const response: string = userInfo.idToken!
+    const user = await firestore().collection('User').doc(response).get()
+    if (user.exists) {
+      await login(user._data)
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'SendHome' }]
       })
-    })
-    const compare = arr.indexOf('userInfo.idToken')
-    console.log(compare)
+    } else {
+      await onGoogleButtonPress()
+    }
   }
 
   return (

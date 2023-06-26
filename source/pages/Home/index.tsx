@@ -6,6 +6,7 @@ import { Title } from '../../components/Text'
 import { ListRenderItem } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
 import firestore from '@react-native-firebase/firestore'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 export interface PropsApi {
   _id: string
   textArea: string
@@ -16,6 +17,7 @@ export interface PropsApi {
 
 export function Home() {
   const [data, setData] = React.useState<PropsApi[]>([])
+  const [photo, setPhoto] = React.useState<any>('')
 
   useFocusEffect(
     React.useCallback(() => {
@@ -30,7 +32,9 @@ export function Home() {
         arr.push(data)
       })
     })
-    console.log(arr)
+    const getPhoto = await AsyncStorage.getItem('@photo')
+    setPhoto(getPhoto)
+    // console.log(arr)
     // setData(arr)
   }
   async function likePost(id: string, index: number) {
@@ -71,7 +75,7 @@ export function Home() {
 
   return (
     <Container>
-      <HeaderIcon />
+      <HeaderIcon image={true} imageURL={photo}/>
       <Flat
         data={data}
         renderItem={renderItem}

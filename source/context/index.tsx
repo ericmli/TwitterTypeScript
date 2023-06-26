@@ -1,15 +1,17 @@
 import React, { createContext, useState, ReactNode } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import firestore from '@react-native-firebase/firestore'
-import { api } from '../services'
 
 type Token = {
-  token: string
+  uid: string
+  displayName: string
+  nick: string
+  photoURL: string
+
   idToken: string
   user: any
   givenName: string
   email: string
-  id: string
   name: string
   photo: string
 }
@@ -31,30 +33,28 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   async function login(token: Token) {
     setToken(token)
-
-    // function randomCode(size: number) {
-    //   const words = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-='
-    //   return Array.from({ length: size }, () => words[Math.floor(Math.random() * words.length)]).join('')
-    // }
-
-    if (token.token) {
-      const response = await api.get('auth/profile')
-      setUsers({
-        token: token.token,
-        name: response.data.data.user.name,
-        email: response.data.data.user.email,
-        id: response.data.data.user._id,
-        nick: response.data.data.user.nick
-      })
+    if (token.uid) {
+      const obj = {
+        idToken: token.uid,
+        name: token.name,
+        email: token.email,
+        nick: token.user,
+        photo: token.photoURL
+      }
+      setUsers(obj)
+      firestore()
+        .collection('User')
+        .doc(token.uid)
+        .set(obj)
     }
 
     if (token.idToken) {
       const obj = {
-        name: token.user.name,
-        email: token.user.email,
-        id: token.user.id,
-        nick: token.user.givenName,
-        photo: token.user.photo
+        idToken: token.idToken,
+        name: token.name,
+        email: token.email,
+        nick: token.nick,
+        photo: token.photo
       }
       setUsers(obj)
       firestore()
@@ -68,7 +68,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     await AsyncStorage.setItem('@token', item.token || '')
     await AsyncStorage.setItem('@name', item.name || '')
     await AsyncStorage.setItem('@email', item.email || '')
-    await AsyncStorage.setItem('@id', item.id || '')
     await AsyncStorage.setItem('@nick', item.nick || '')
     await AsyncStorage.setItem('@photo', item.photo || '')
   }
