@@ -33,13 +33,20 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   async function login(token: Token) {
     setToken(token)
+    // console.log({
+    //   idToken: token.uid,
+    //   name: token.name,
+    //   email: token.email,
+    //   nick: token.user,
+    //   photo: token.photo
+    // })
     if (token.uid) {
       const obj = {
         idToken: token.uid,
         name: token.name,
         email: token.email,
         nick: token.user,
-        photo: token.photoURL
+        photo: token.photo
       }
       setUsers(obj)
       firestore()
@@ -59,7 +66,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       setUsers(obj)
       firestore()
         .collection('User')
-        .doc(token.idToken)
+        .doc(token.email)
         .set(obj)
     }
   }

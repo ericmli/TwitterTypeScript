@@ -30,6 +30,7 @@ module.exports = {
     'operator-linebreak': 'off',
     'space-before-function-paren': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
-    'multiline-ternary': 'off'
+    'multiline-ternary': 'off',
+    'object-shorthand': 'off'
   }
 }

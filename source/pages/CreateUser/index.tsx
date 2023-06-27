@@ -40,7 +40,13 @@ export function CreateUser() {
         }
         auth().createUserWithEmailAndPassword(obj.email, obj.password)
           .then((data) => {
-            login({ ...data.user._user, name: input.name, user: input.user })
+            login({
+              email: data.user.email,
+              uid: data.user.uid,
+              photo: data.user.photoURL,
+              name: input.name,
+              user: input.user
+            })
             navigation.reset({
               index: 0,
               routes: [{ name: 'SendHome' }]

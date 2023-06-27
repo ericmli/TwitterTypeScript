@@ -23,7 +23,7 @@ export function ButtonGoogle({ name, create }: ButtonGoogleProps) {
     await GoogleSignin.hasPlayServices()
     try {
       const userInfo = await GoogleSignin.signIn()
-      await login(userInfo)
+      login({ ...userInfo.user, idToken: userInfo.idToken, nick: userInfo.user.givenName })
       navigation.reset({
         index: 0,
         routes: [{ name: 'SendHome' }]
@@ -37,16 +37,17 @@ export function ButtonGoogle({ name, create }: ButtonGoogleProps) {
         console.log('play services not available or outdated')
       } else {
         console.log('some other error happened')
+        console.log(error)
       }
     }
   }
 
   async function pushLogin() {
     const userInfo = await GoogleSignin.signIn()
-    const response: string = userInfo.idToken!
-    const user = await firestore().collection('User').doc(response).get()
+    const getUserEmail = userInfo.user.email
+    const user = await firestore().collection('User').doc(getUserEmail).get()
     if (user.exists) {
-      await login(user._data)
+      await login(user.data())
       navigation.reset({
         index: 0,
         routes: [{ name: 'SendHome' }]

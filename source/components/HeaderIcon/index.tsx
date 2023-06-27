@@ -15,10 +15,7 @@ export function HeaderIcon({ text, onPress, image, imageURL }: PropsHeaderIcon) 
       <Button onPress={onPress}>
         {image ?
           <ContainerImg>
-            {imageURL ?
-              <Img source={{ uri: imageURL }} /> :
-              <Img source={{ uri: 'https://i.stack.imgur.com/l60Hf.png' }} />
-            }
+            <Img source={{ uri: imageURL || 'https://i.stack.imgur.com/l60Hf.png' }} />
           </ContainerImg> :
           <Title text={`${text || ''}`} color='invertColor' size='small' />
         }

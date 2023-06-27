@@ -12,6 +12,8 @@ import firestore from '@react-native-firebase/firestore'
 export interface LoginFormValues {
   user: string
   password: string
+  _data: any
+  exists: any
 }
 
 export function LoginUser() {
@@ -39,7 +41,7 @@ export function LoginUser() {
 
           const response = await firestore().collection('User').doc(data.user.uid).get()
           if (response.exists) {
-            await login(response._data)
+            await login(response.data())
             navigation.reset({
               index: 0,
               routes: [{ name: 'SendHome' }]
