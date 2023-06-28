@@ -1,5 +1,5 @@
 import React from 'react'
-import { AsideUser, Container, ContainerAccess, ContainerAmount, ContainerBody, ContainerImage, ContainerNameUser, Flat, Icone, IconeEntypo, Image, ImageUser, View } from './styles'
+import { AsideUser, Container, ContainerAccess, ContainerAmount, ContainerBody, ContainerImage, ContainerNameUser, Flat, Icone, Image, ImageUser, View } from './styles'
 import { HeaderIcon } from '../../components/HeaderIcon'
 import { Title } from '../../components/Text'
 import { ListRenderItem, RefreshControl } from 'react-native'
@@ -7,6 +7,7 @@ import firestore from '@react-native-firebase/firestore'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import storage from '@react-native-firebase/storage'
 import { formatTimeRange } from '../../utils'
+import { LikePost } from '../../components/LikePost'
 export interface PropsApi {
   id: string
   textArea: string
@@ -17,7 +18,7 @@ export interface PropsApi {
 
 export function Home() {
   const [data, setData] = React.useState<PropsApi[]>([])
-  const [photo, setPhoto] = React.useState<any>('')
+  const [getUser, setGetUser] = React.useState<any>('')
   const [refreshing, setRefreshing] = React.useState<boolean>(false)
 
   React.useEffect(() => {
@@ -53,28 +54,16 @@ export function Home() {
         arr.push(data)
       })
     })
-    const getPhoto = await AsyncStorage.getItem('@photo')
-    setPhoto(getPhoto)
     setData(arr)
+
+    setGetUser({
+      token: await AsyncStorage.getItem('@token'),
+      photo: await AsyncStorage.getItem('@photo'),
+      email: await AsyncStorage.getItem('@email')
+    })
   }
 
-  async function likePost(id: string, index: number) {
-    const newData = [...data]
-    const post = newData[index]._data
-    console.log(JSON.stringify(post, null, 4))
-    if (post.liked) {
-      post.like = post.like - 1
-      post.userBeLike = null
-      post.liked = false
-    } else {
-      post.like = post.like + 1
-      post.userBeLike = id
-      post.liked = true
-    }
-    setData(newData)
-  }
-
-  const renderItem: ListRenderItem<PropsApi> = ({ item, index }) => {
+  const renderItem: ListRenderItem<PropsApi> = ({ item }) => {
     return (
       <View key={item._data.id} onPress={() => console.log(item._data.id)}>
 
@@ -93,17 +82,13 @@ export function Home() {
           </ContainerImage>
 
           <ContainerAccess>
-            <ContainerAmount>
-              {item._data.liked ?
-                <IconeEntypo name='heart' onPress={() => likePost(item._data.id, index)} />
-                : <Icone name='heart' onPress={() => likePost(item._data.id, index)} />}
-              <Title size='small' color='inputColor' text={String(item._data.like)} />
-            </ContainerAmount>
+            <LikePost id={item._data.id} getUser={getUser}/>
             <ContainerAmount>
               <Icone name='comment' />
               <Title size='small' color='inputColor' text={item._data.comments.length} />
             </ContainerAmount>
           </ContainerAccess>
+
         </ContainerBody>
       </View>
     )
@@ -112,7 +97,7 @@ export function Home() {
   function handleRefresh() {
     setRefreshing(true)
     setTimeout(() => {
-      setData(data)
+      loadApi()
       setRefreshing(false)
     }, 2000)
   }
@@ -121,14 +106,12 @@ export function Home() {
     <Container>
       <Flat
         data={data}
-        ListHeaderComponent={<HeaderIcon image={true} imageURL={photo} />}
+        ListHeaderComponent={<HeaderIcon image={true} imageURL={getUser.photo} />}
         renderItem={renderItem}
         keyExtractor={(item: PropsApi) => item.id}
         initialNumToRender={10}
         showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-        }
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
       />
     </Container>
   )

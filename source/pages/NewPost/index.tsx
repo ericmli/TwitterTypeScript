@@ -53,7 +53,6 @@ export function NewPost() {
       try {
         const imageUri = response?.assets[0].uri
         const imageName = response?.assets[0].fileName
-        console.log(imageName)
         if (response) {
           storage().ref(imageName).putFile(imageUri).then().catch((e) => Alert.alert(e))
         }
@@ -68,7 +67,7 @@ export function NewPost() {
           textArea: input.comment,
           user: user.email,
           userBeLike: [],
-          photo: imageName,
+          photo: imageName || null,
           name: user.name,
           nick: user.nick,
           photoUser: user.photoUser
