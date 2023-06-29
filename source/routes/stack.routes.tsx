@@ -6,13 +6,14 @@ import { BottomTabs } from './bottom.routes'
 import { NewPost } from '../pages/NewPost'
 import { Create } from '../pages/Create'
 import { CreateUser } from '../pages/CreateUser'
+import { Post } from '../pages/Post'
 
 const Stack = createNativeStackNavigator()
 
 export function StackNavigator() {
   return (
     <Stack.Navigator
-      initialRouteName='Login'>
+      initialRouteName='SendHome'>
       <Stack.Screen
         name='Login'
         component={Login}
@@ -41,6 +42,11 @@ export function StackNavigator() {
       <Stack.Screen
         name='NewPost'
         component={NewPost}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name='Post'
+        component={Post}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

@@ -1,12 +1,13 @@
 import React from 'react'
-import { AsideUser, Container, ContainerAccess, ContainerAmount, ContainerBody, ContainerImage, ContainerNameUser, Flat, Icone, IconeEntypo, Image, ImageUser, View } from './styles'
+import { AsideUser, Container, ContainerAccess, ContainerAmount, ContainerBody, ContainerImage, ContainerNameUser, Flat, Icone, IconeEntypo, ImageUser, View } from './styles'
 import { HeaderIcon } from '../../components/HeaderIcon'
 import { Title } from '../../components/Text'
 import { ListRenderItem, RefreshControl } from 'react-native'
 import firestore from '@react-native-firebase/firestore'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import storage from '@react-native-firebase/storage'
 import { formatTimeRange } from '../../utils'
+import { useNavigation } from '@react-navigation/native'
+import { LoadImage } from '../../components/Image'
 export interface PropsApi {
   id: string
   textArea: string
@@ -21,32 +22,11 @@ export function Home() {
   const [data, setData] = React.useState<PropsApi[]>([])
   const [getUser, setGetUser] = React.useState<any>('')
   const [refreshing, setRefreshing] = React.useState<boolean>(false)
+  const navigation = useNavigation()
 
   React.useEffect(() => {
     loadApi()
   }, [])
-
-  function LoadImage(photo: any) {
-    const [image, setImage] = React.useState<any>(null)
-    React.useEffect(() => {
-      getImage()
-    }, [])
-    async function getImage() {
-      if (photo.photo) {
-        const reference = storage().ref(photo.photo)
-        const url = await reference.getDownloadURL()
-        setImage(url)
-      }
-    }
-
-    if (image) {
-      return (<Image source={{ uri: image }} />)
-    } else {
-      return (
-        <></>
-      )
-    }
-  }
 
   async function loadApi() {
     const arr: PropsApi[] = []
@@ -85,7 +65,7 @@ export function Home() {
 
   const renderItem: ListRenderItem<PropsApi> = ({ item, index }) => {
     return (
-      <View key={item._data.id} onPress={() => console.log(item._data.id)}>
+      <View key={item._data.id} onPress={() => navigation.navigate('Post', item._data)}>
 
         <AsideUser>
           <ImageUser source={{ uri: item._data.photoUser }} />
@@ -98,7 +78,7 @@ export function Home() {
           <Title size='small' color='invertColor' text={item._data.textArea} />
 
           <ContainerImage>
-            <LoadImage photo={item._data.photo} />
+           {item?._data?.photo && <LoadImage photo={item._data.photo} />}
           </ContainerImage>
 
           <ContainerAccess>

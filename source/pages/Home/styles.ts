@@ -82,9 +82,3 @@ export const ContainerAmount = styled.TouchableOpacity`
 export const ContainerImage = styled.View`
   max-height: 300px;
 `
-
-export const Image = styled.Image`
-  width: 100%;
-  height: 200px;
-  border-radius: 10px;
-`

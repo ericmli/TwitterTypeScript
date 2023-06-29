@@ -17,7 +17,8 @@ project.ext.vectoricons = [
         'Octicons.ttf', // Octicons
         'Zocial.ttf', // Zocial
         'SimpleLineIcons.ttf', // SimpleLineIcons] // Name of the font files you want to copy
-        'MaterialCommunityIcons.ttf'
+        'MaterialCommunityIcons.ttf',
+        'AntDesign.ttf'
         ]
 ]
 
