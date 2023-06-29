@@ -1,5 +1,5 @@
 import React from 'react'
-import { AsideUser, Container, ContainerAccess, ContainerAmount, ContainerBody, ContainerImage, ContainerNameUser, Flat, Icone, Image, ImageUser, View } from './styles'
+import { AsideUser, Container, ContainerAccess, ContainerAmount, ContainerBody, ContainerImage, ContainerNameUser, Flat, Icone, IconeEntypo, Image, ImageUser, View } from './styles'
 import { HeaderIcon } from '../../components/HeaderIcon'
 import { Title } from '../../components/Text'
 import { ListRenderItem, RefreshControl } from 'react-native'
@@ -7,13 +7,14 @@ import firestore from '@react-native-firebase/firestore'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import storage from '@react-native-firebase/storage'
 import { formatTimeRange } from '../../utils'
-import { LikePost } from '../../components/LikePost'
 export interface PropsApi {
   id: string
   textArea: string
   like: number
   liked: boolean
   _data: any
+  likeBy: string[]
+  likePost: number
 }
 
 export function Home() {
@@ -63,7 +64,26 @@ export function Home() {
     })
   }
 
-  const renderItem: ListRenderItem<PropsApi> = ({ item }) => {
+  async function likePost(id: string, index: number) {
+    const response = data[index]._data
+    const hasItem = response.likeBy.indexOf(getUser.email)
+    let updatedLikeBy
+    let updatedLikePost = response.like
+    let obj = {}
+    if (hasItem === -1) {
+      updatedLikeBy = [...response.likeBy, getUser.email]
+      updatedLikePost += 1
+      obj = { ...response, likeBy: updatedLikeBy, like: updatedLikePost, liked: !response.liked }
+    } else {
+      updatedLikeBy = response.likeBy.filter((i: any) => i !== getUser.email)
+      updatedLikePost -= 1
+      obj = { ...response, likeBy: updatedLikeBy, like: updatedLikePost, liked: !response.liked }
+    }
+    await firestore().collection('Post').doc(id).set(obj)
+    loadApi()
+  }
+
+  const renderItem: ListRenderItem<PropsApi> = ({ item, index }) => {
     return (
       <View key={item._data.id} onPress={() => console.log(item._data.id)}>
 
@@ -82,13 +102,17 @@ export function Home() {
           </ContainerImage>
 
           <ContainerAccess>
-            <LikePost id={item._data.id} getUser={getUser}/>
+            <ContainerAmount onPress={() => likePost(item._data.id, index)} >
+              {item._data.likeBy.indexOf(getUser.email) !== -1 ?
+                <IconeEntypo name='heart' />
+                : <Icone name='heart' />}
+              <Title size='small' color='inputColor' text={item._data.like} />
+            </ContainerAmount>
             <ContainerAmount>
               <Icone name='comment' />
               <Title size='small' color='inputColor' text={item._data.comments.length} />
             </ContainerAmount>
           </ContainerAccess>
-
         </ContainerBody>
       </View>
     )

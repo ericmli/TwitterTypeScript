@@ -66,11 +66,12 @@ export function NewPost() {
           postDate: time,
           textArea: input.comment,
           user: user.email,
-          userBeLike: [],
+          likeBy: [],
           photo: imageName || null,
           name: user.name,
           nick: user.nick,
-          photoUser: user.photoUser
+          photoUser: user.photoUser,
+          liked: false
         }
         firestore().collection('Post').doc(code).set(obj)
         navigation.goBack()

@@ -12,7 +12,7 @@ interface ObjLikes {
 export function LikePost(id: any, getUser: any) {
   const [item, setItem] = React.useState<ObjLikes | undefined>()
   async function getLikes() {
-    console.log(id, '#@#@#@')
+    console.log(getUser, '#@#@#@')
     await firestore().collection(`Post/${id}/likes`).get().then((item) => {
       item.forEach((data: any) => {
         setItem(data.data())

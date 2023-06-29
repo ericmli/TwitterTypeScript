@@ -76,7 +76,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     await AsyncStorage.setItem('@name', item.name || '')
     await AsyncStorage.setItem('@email', item.email || '')
     await AsyncStorage.setItem('@nick', item.nick || '')
-    await AsyncStorage.setItem('@photo', item.photo || '')
+    await AsyncStorage.setItem('@photo', item.photo || 'https://i.stack.imgur.com/l60Hf.png')
   }
 
   async function logout() {
