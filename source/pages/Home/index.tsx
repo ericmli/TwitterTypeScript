@@ -1,13 +1,13 @@
 import React from 'react'
-import { AsideUser, Container, ContainerAccess, ContainerAmount, ContainerBody, ContainerImage, ContainerNameUser, Flat, Icone, IconeEntypo, ImageUser, View } from './styles'
+import { AsideUser, Container, ContainerBody, ContainerImage, ContainerNameUser, Flat, ImageUser, View } from './styles'
 import { HeaderIcon } from '../../components/HeaderIcon'
 import { Title } from '../../components/Text'
 import { ListRenderItem, RefreshControl } from 'react-native'
 import firestore from '@react-native-firebase/firestore'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { formatTimeRange } from '../../utils'
+import { formatTimeRange, getUserStorage, loadApi } from '../../utils'
 import { useNavigation } from '@react-navigation/native'
 import { LoadImage } from '../../components/Image'
+import { BottomPost } from '../../components/BottomPost'
 export interface PropsApi {
   id: string
   textArea: string
@@ -19,29 +19,20 @@ export interface PropsApi {
 }
 
 export function Home() {
-  const [data, setData] = React.useState<PropsApi[]>([])
+  const [data, setData] = React.useState<any>([])
   const [getUser, setGetUser] = React.useState<any>('')
   const [refreshing, setRefreshing] = React.useState<boolean>(false)
   const navigation = useNavigation()
 
   React.useEffect(() => {
-    loadApi()
+    fetchData()
   }, [])
 
-  async function loadApi() {
-    const arr: PropsApi[] = []
-    await firestore().collection('Post').orderBy('postDate', 'desc').get().then((item) => {
-      item.forEach((data: any) => {
-        arr.push(data)
-      })
-    })
-    setData(arr)
+  async function fetchData() {
+    const data = await loadApi()
+    setData(data)
 
-    setGetUser({
-      token: await AsyncStorage.getItem('@token'),
-      photo: await AsyncStorage.getItem('@photo'),
-      email: await AsyncStorage.getItem('@email')
-    })
+    setGetUser(await getUserStorage())
   }
 
   async function likePost(id: string, index: number) {
@@ -60,7 +51,7 @@ export function Home() {
       obj = { ...response, likeBy: updatedLikeBy, like: updatedLikePost, liked: !response.liked }
     }
     await firestore().collection('Post').doc(id).set(obj)
-    loadApi()
+    fetchData()
   }
 
   const renderItem: ListRenderItem<PropsApi> = ({ item, index }) => {
@@ -80,19 +71,7 @@ export function Home() {
           <ContainerImage>
            {item?._data?.photo && <LoadImage photo={item._data.photo} />}
           </ContainerImage>
-
-          <ContainerAccess>
-            <ContainerAmount onPress={() => likePost(item._data.id, index)} >
-              {item._data.likeBy.indexOf(getUser.email) !== -1 ?
-                <IconeEntypo name='heart' />
-                : <Icone name='heart' />}
-              <Title size='small' color='inputColor' text={item._data.like} />
-            </ContainerAmount>
-            <ContainerAmount>
-              <Icone name='comment' />
-              <Title size='small' color='inputColor' text={item._data.comments.length} />
-            </ContainerAmount>
-          </ContainerAccess>
+          <BottomPost onPress={() => likePost(item._data.id, index)} item={item} getUser={getUser}/>
         </ContainerBody>
       </View>
     )
@@ -101,7 +80,7 @@ export function Home() {
   function handleRefresh() {
     setRefreshing(true)
     setTimeout(() => {
-      loadApi()
+      fetchData()
       setRefreshing(false)
     }, 2000)
   }

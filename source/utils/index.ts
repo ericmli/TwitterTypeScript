@@ -1,3 +1,6 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import firestore from '@react-native-firebase/firestore'
+
 export function randomCode(size: number) {
   const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
   return Array.from({ length: size }, () => caracteres[Math.floor(Math.random() * caracteres.length)]).join('')
@@ -39,4 +42,24 @@ export function formatTimeRange(date: string): string {
       return `${timeDiffInWeeks}w`
     }
   }
+}
+
+export async function loadApi() {
+  const arr: string[] = []
+  await firestore().collection('Post').orderBy('idLength', 'desc').get().then((item: any) => {
+    item.forEach((data: any) => {
+      arr.push(data)
+    })
+  })
+  return arr
+}
+
+export async function getUserStorage() {
+  const getUser = {
+    email: await AsyncStorage.getItem('@email'),
+    name: await AsyncStorage.getItem('@name'),
+    nick: await AsyncStorage.getItem('@nick'),
+    photoUser: await AsyncStorage.getItem('@photo')
+  }
+  return getUser
 }

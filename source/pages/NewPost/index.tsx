@@ -5,9 +5,8 @@ import { Input } from '../../components/Input'
 import { useForm } from 'react-hook-form'
 import { useNavigation } from '@react-navigation/native'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
-import { formatDateTime, randomCode } from '../../utils'
+import { formatDateTime, getUserStorage, loadApi, randomCode } from '../../utils'
 import firestore from '@react-native-firebase/firestore'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import storage from '@react-native-firebase/storage'
 import { Alert } from 'react-native'
 
@@ -17,6 +16,7 @@ export interface PostFormValues {
 
 export function NewPost() {
   const navigation = useNavigation()
+  const [data, setData] = React.useState<string[]>()
   const [response, setResponse] = React.useState<any>()
   const [user, setUser] = React.useState<any>()
 
@@ -27,18 +27,14 @@ export function NewPost() {
   })
   const userChange = watch('comment')
 
+  async function push() {
+    const data = await loadApi()
+    setData(data)
+    setUser(await getUserStorage())
+  }
   React.useEffect(() => {
-    async function push() {
-      const getUser = {
-        email: await AsyncStorage.getItem('@email'),
-        name: await AsyncStorage.getItem('@name'),
-        nick: await AsyncStorage.getItem('@nick'),
-        photoUser: await AsyncStorage.getItem('@photo')
-      }
-      setUser(getUser)
-    }
     push()
-  })
+  }, [])
 
   const onButtonPress = React.useCallback((type: string, options?: any) => {
     if (type === 'capture') {
@@ -51,6 +47,7 @@ export function NewPost() {
   async function onSubmit(input: PostFormValues) {
     if (userChange.length > 0) {
       try {
+        const length = data?.length
         const imageUri = response?.assets[0].uri
         const imageName = response?.assets[0].fileName
         if (response) {
@@ -71,7 +68,8 @@ export function NewPost() {
           name: user.name,
           nick: user.nick,
           photoUser: user.photoUser,
-          liked: false
+          liked: false,
+          idLength: length && length + 1
         }
         firestore().collection('Post').doc(code).set(obj)
         navigation.goBack()

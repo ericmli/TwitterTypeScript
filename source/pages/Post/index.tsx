@@ -1,5 +1,5 @@
 import React from 'react'
-import { Body, Container, ContainerIcone, ContainerUser, ContainerUserTitle, Header, Icone, ImageUser } from './styles'
+import { Line, Container, ContainerIcone, ContainerUser, ContainerUserTitle, Header, Icone, ImageUser } from './styles'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { Title } from '../../components/Text'
 import { LoadImage } from '../../components/Image'
@@ -27,11 +27,13 @@ export function Post() {
         </ContainerUserTitle>
       </ContainerUser>
 
-      <Body>
+      <Line>
         <Title size='small' family='bold' text={data?.textArea} color='invertColor' />
-        {data?.photo && <LoadImage source={{ uri: data?.photo }}/>}
-      </Body>
-        <Title size='xnano' family='bold' text={data?.postDate} color='invertColor' />
+        {data?.photo && <LoadImage source={{ uri: data?.photo }} />}
+      </Line>
+      <Line>
+        <Title size='xnano' family='bold' text={`${data?.postDate} de Earth`} color='invertColor' />
+      </Line>
     </Container>
   )
 }

@@ -11,6 +11,7 @@ export const Header = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  margin-bottom: 5px;
 `
 export const Icone = styled(Icon)`
   color: ${(props) => props.theme.colors.invertColor};
@@ -39,7 +40,7 @@ export const ImageUser = styled.Image`
 export const ContainerUserTitle = styled.View`
   flex-direction: column;
 `
-export const Body = styled.View`
+export const Line = styled.View`
   margin-bottom: 10px;
   padding-bottom: 10px;
   border-bottom-width: 0.2px;
