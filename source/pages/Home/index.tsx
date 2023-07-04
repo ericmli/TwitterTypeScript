@@ -3,20 +3,11 @@ import { AsideUser, Container, ContainerBody, ContainerImage, ContainerNameUser,
 import { HeaderIcon } from '../../components/HeaderIcon'
 import { Title } from '../../components/Text'
 import { ListRenderItem, RefreshControl } from 'react-native'
-import firestore from '@react-native-firebase/firestore'
-import { formatTimeRange, getUserStorage, loadApi } from '../../utils'
+import { formatTimeRange, getUserStorage } from '../../utils'
 import { useNavigation } from '@react-navigation/native'
 import { LoadImage } from '../../components/Image'
 import { BottomPost } from '../../components/BottomPost'
-export interface PropsApi {
-  id: string
-  textArea: string
-  like: number
-  liked: boolean
-  _data: any
-  likeBy: string[]
-  likePost: number
-}
+import { PropsApi, loadApi } from '../../service'
 
 export function Home() {
   const [data, setData] = React.useState<any>([])
@@ -29,32 +20,13 @@ export function Home() {
   }, [])
 
   async function fetchData() {
-    const data = await loadApi()
+    const data = await loadApi({ route: 'Post', doc: 'idLength', order: 'desc' })
     setData(data)
 
     setGetUser(await getUserStorage())
   }
 
-  async function likePost(id: string, index: number) {
-    const response = data[index]._data
-    const hasItem = response.likeBy.indexOf(getUser.email)
-    let updatedLikeBy
-    let updatedLikePost = response.like
-    let obj = {}
-    if (hasItem === -1) {
-      updatedLikeBy = [...response.likeBy, getUser.email]
-      updatedLikePost += 1
-      obj = { ...response, likeBy: updatedLikeBy, like: updatedLikePost, liked: !response.liked }
-    } else {
-      updatedLikeBy = response.likeBy.filter((i: any) => i !== getUser.email)
-      updatedLikePost -= 1
-      obj = { ...response, likeBy: updatedLikeBy, like: updatedLikePost, liked: !response.liked }
-    }
-    await firestore().collection('Post').doc(id).set(obj)
-    fetchData()
-  }
-
-  const renderItem: ListRenderItem<PropsApi> = ({ item, index }) => {
+  const renderItem: ListRenderItem<PropsApi> = ({ item }) => {
     return (
       <View key={item._data.id} onPress={() => navigation.navigate('Post', item._data)}>
 
@@ -71,7 +43,7 @@ export function Home() {
           <ContainerImage>
            {item?._data?.photo && <LoadImage photo={item._data.photo} />}
           </ContainerImage>
-          <BottomPost onPress={() => likePost(item._data.id, index)} item={item} getUser={getUser}/>
+          <BottomPost id={item._data.id}/>
         </ContainerBody>
       </View>
     )
@@ -89,7 +61,7 @@ export function Home() {
     <Container>
       <Flat
         data={data}
-        ListHeaderComponent={<HeaderIcon image={true} imageURL={getUser.photo} />}
+        ListHeaderComponent={<HeaderIcon image={true} imageURL={getUser.photoUser} />}
         renderItem={renderItem}
         keyExtractor={(item: PropsApi) => item.id}
         initialNumToRender={10}

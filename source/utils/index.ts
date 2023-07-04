@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import firestore from '@react-native-firebase/firestore'
 
 export function randomCode(size: number) {
   const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -44,14 +43,11 @@ export function formatTimeRange(date: string): string {
   }
 }
 
-export async function loadApi() {
-  const arr: string[] = []
-  await firestore().collection('Post').orderBy('idLength', 'desc').get().then((item: any) => {
-    item.forEach((data: any) => {
-      arr.push(data)
-    })
-  })
-  return arr
+export interface TypeGetUserStorage {
+  email: string
+  name: string
+  nick: string
+  photoUser: string
 }
 
 export async function getUserStorage() {

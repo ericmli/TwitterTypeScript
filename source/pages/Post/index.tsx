@@ -3,6 +3,7 @@ import { Line, Container, ContainerIcone, ContainerUser, ContainerUserTitle, Hea
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { Title } from '../../components/Text'
 import { LoadImage } from '../../components/Image'
+import { BottomPost } from '../../components/BottomPost'
 
 export function Post() {
   const [data, setData] = React.useState<any>()
@@ -34,6 +35,10 @@ export function Post() {
       <Line>
         <Title size='xnano' family='bold' text={`${data?.postDate} de Earth`} color='invertColor' />
       </Line>
+      <Line>
+        <BottomPost id={data?.id} />
+      </Line>
+
     </Container>
   )
 }
