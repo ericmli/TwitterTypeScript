@@ -21,9 +21,6 @@ export const ContainerIcone = styled.TouchableOpacity`
   position: absolute;
   left: 0;
 `
-export const FlatList = styled.FlatList`
-  
-`
 
 export const ContainerUser = styled.View`
   flex-direction: row;
@@ -46,4 +43,7 @@ export const Line = styled.View`
   border-bottom-width: 0.2px;
   border-color:  ${(props) => props.theme.colors.inputColor};
   gap: 10px;
+`
+export const ContainerComments = styled.View`
+  margin-top: 10px;
 `

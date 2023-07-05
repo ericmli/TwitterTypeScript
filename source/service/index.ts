@@ -14,6 +14,7 @@ export interface PropsApi {
   _data: any
   likeBy: string[]
   likePost: number
+  comments: string[]
 }
 
 export async function loadApi({ route, doc, order } : TypeLoadApi) {

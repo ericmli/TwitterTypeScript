@@ -22,7 +22,6 @@ export function Home() {
   async function fetchData() {
     const data = await loadApi({ route: 'Post', doc: 'idLength', order: 'desc' })
     setData(data)
-
     setGetUser(await getUserStorage())
   }
 
@@ -41,9 +40,9 @@ export function Home() {
           <Title size='small' color='invertColor' text={item._data.textArea} />
 
           <ContainerImage>
-           {item?._data?.photo && <LoadImage photo={item._data.photo} />}
+            {item?._data?.photo && <LoadImage photo={item._data.photo} />}
           </ContainerImage>
-          <BottomPost id={item._data.id}/>
+          <BottomPost id={item._data.id && item._data.id} />
         </ContainerBody>
       </View>
     )
@@ -51,10 +50,8 @@ export function Home() {
 
   function handleRefresh() {
     setRefreshing(true)
-    setTimeout(() => {
-      fetchData()
-      setRefreshing(false)
-    }, 2000)
+    fetchData()
+    setRefreshing(false)
   }
 
   return (

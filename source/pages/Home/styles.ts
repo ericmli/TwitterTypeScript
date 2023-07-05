@@ -1,6 +1,6 @@
 import styled from 'styled-components/native'
-import { PropsApi } from '.'
 import { FlatList } from 'react-native'
+import { PropsApi } from '../../service'
 
 export const Container = styled.SafeAreaView`
   background: ${(props) => props.theme.colors.mainBg};

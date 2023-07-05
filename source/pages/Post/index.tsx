@@ -1,5 +1,5 @@
 import React from 'react'
-import { Line, Container, ContainerIcone, ContainerUser, ContainerUserTitle, Header, Icone, ImageUser } from './styles'
+import { Line, Container, ContainerIcone, ContainerUser, ContainerUserTitle, Header, Icone, ImageUser, ContainerComments } from './styles'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { Title } from '../../components/Text'
 import { LoadImage } from '../../components/Image'
@@ -10,7 +10,7 @@ export function Post() {
   const navigation = { navigate: useNavigation(), route: useRoute() }
   React.useEffect(() => {
     setData(navigation.route.params)
-  })
+  }, [])
   return (
     <Container>
       <Header>
@@ -36,9 +36,13 @@ export function Post() {
         <Title size='xnano' family='bold' text={`${data?.postDate} de Earth`} color='invertColor' />
       </Line>
       <Line>
-        <BottomPost id={data?.id} />
+        <BottomPost id={data?.id && data?.id} />
       </Line>
-
+      {data?.comments.map((item: any, index: number) => (
+        <ContainerComments key={index}>
+          <Title size='xnano' family='bold' text={`${item}`} color='invertColor' />
+        </ContainerComments>
+      ))}
     </Container>
   )
 }

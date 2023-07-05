@@ -3,7 +3,6 @@ import { ContainerAccess, ContainerAmount, Icone, IconeEntypo } from './styles'
 import { Title } from '../Text'
 import firestore from '@react-native-firebase/firestore'
 import { getUserStorage } from '../../utils'
-
 interface TypeBottomPost {
   id: string
 }
@@ -11,9 +10,10 @@ interface TypeBottomPost {
 export function BottomPost({ id }: TypeBottomPost) {
   const [getUser, setGetUser] = React.useState<any>()
   const [item, setItem] = React.useState<any>()
+
   React.useEffect(() => {
     loadUtils()
-  }, [])
+  }, [id])
   async function loadUtils() {
     setGetUser(await getUserStorage())
     const data = firestore().collection('Post').doc(id)
@@ -36,6 +36,7 @@ export function BottomPost({ id }: TypeBottomPost) {
     await firestore().collection('Post').doc(id).set(obj)
     loadUtils()
   }
+
   return (
     <ContainerAccess>
       <ContainerAmount onPress={() => likePost(id)} >
