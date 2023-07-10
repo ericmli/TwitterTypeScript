@@ -4,7 +4,6 @@ import { Image } from './styles'
 
 export function LoadImage(photo: any) {
   const [image, setImage] = React.useState<string>()
-  const [size, setSize] = React.useState<boolean>(false)
   React.useEffect(() => {
     getImage()
   }, [])
@@ -17,12 +16,11 @@ export function LoadImage(photo: any) {
       const reference = storage().ref(photo.source.uri)
       const url = await reference.getDownloadURL()
       setImage(url)
-      setSize(true)
     }
   }
 
   if (image) {
-    return (<Image source={{ uri: image }} size={size} />)
+    return (<Image source={{ uri: image }} />)
   } else {
     return (
       <></>

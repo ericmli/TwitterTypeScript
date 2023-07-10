@@ -5,42 +5,69 @@ export function randomCode(size: number) {
   return Array.from({ length: size }, () => caracteres[Math.floor(Math.random() * caracteres.length)]).join('')
 }
 
-export function formatDateTime(date: any) {
-  const day = String(date.getDate()).padStart(2, '0')
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const year = date.getFullYear()
-  const hour = String(date.getHours()).padStart(2, '0')
-  const minute = String(date.getMinutes()).padStart(2, '0')
-
-  return `${day}/${month}/${year} ${hour}:${minute}`
+interface TypeDateFormat {
+  date: Date
+  nanoseconds: number
+  seconds: number
+}
+export function formatDateTime(date: TypeDateFormat) {
+  const nanoseconds = date?.nanoseconds
+  const seconds = date?.seconds
+  const milliseconds = seconds * 1000 + nanoseconds / 1000000
+  const dateForm = new Date(milliseconds)
+  const day = String(dateForm.getDate()).padStart(2, '0')
+  const month = String(dateForm.getMonth() + 1).padStart(2, '0')
+  const year = String(dateForm.getFullYear()).padStart(2, '0')
+  const hour = String(dateForm.getHours()).padStart(2, '0')
+  const minute = String(dateForm.getMinutes()).padStart(2, '0')
+  const formattedDate = `${day}/${month}/${year} ${hour}:${minute}`
+  return formattedDate
 }
 
-export function formatTimeRange(date: string): string {
+export function formatDateWeeks(date: TypeDateFormat) {
   const currentDate = new Date()
-  const [day, month, year, hours, minutes] = date.split(/[/: ]/).map(Number)
+  const nanoseconds = date?.nanoseconds
+  const seconds = date?.seconds
 
-  const providedDate = new Date(year, month - 1, day, hours, minutes)
+  const providedDate = new Date(0) // Data de referência em 01/01/1970
+  providedDate.setSeconds(seconds)
+  providedDate.setMilliseconds(nanoseconds / 1000000)
+
   const timeDiffInMilliseconds = currentDate.getTime() - providedDate.getTime()
   const timeDiffInSeconds = Math.floor(timeDiffInMilliseconds / 1000)
   const timeDiffInMinutes = Math.floor(timeDiffInSeconds / 60)
+  const timeDiffInHours = Math.floor(timeDiffInMinutes / 60)
+  const timeDiffInDays = Math.floor(timeDiffInMinutes / (60 * 24))
+  const timeDiffInWeeks = Math.floor(timeDiffInMinutes / (60 * 24 * 7))
+  const timeDiffInMonths = Math.floor(timeDiffInMinutes / (60 * 24 * 30))
+  const timeDiffInYears = Math.floor(timeDiffInMinutes / (60 * 24 * 365))
 
-  if (timeDiffInSeconds < 60) {
-    return `${timeDiffInSeconds}s`
-  } else if (timeDiffInMinutes < 60) {
-    return `${timeDiffInMinutes}m`
-  } else {
-    const timeDiffInHours = Math.floor(timeDiffInMinutes / 60)
-    const timeDiffInDays = Math.floor(timeDiffInMinutes / (60 * 24))
-    const timeDiffInWeeks = Math.floor(timeDiffInMinutes / (60 * 24 * 7))
-
-    if (timeDiffInHours < 24) {
-      return `${timeDiffInHours}h`
-    } else if (timeDiffInDays < 7) {
-      return `${timeDiffInDays}d`
-    } else {
-      return `${timeDiffInWeeks}w`
-    }
+  let formattedTime = ''
+  switch (true) {
+    case timeDiffInSeconds < 60:
+      formattedTime = `${timeDiffInSeconds}s`
+      break
+    case timeDiffInMinutes < 60:
+      formattedTime = `${timeDiffInMinutes}m`
+      break
+    case timeDiffInHours < 24:
+      formattedTime = `${timeDiffInHours}h`
+      break
+    case timeDiffInDays < 7:
+      formattedTime = `${timeDiffInDays}d`
+      break
+    case timeDiffInWeeks < 4:
+      formattedTime = `${timeDiffInWeeks}w`
+      break
+    case timeDiffInMonths < 12:
+      formattedTime = `${timeDiffInMonths}mo`
+      break
+    default:
+      formattedTime = `${timeDiffInYears}y`
+      break
   }
+
+  return formattedTime
 }
 
 export interface TypeGetUserStorage {

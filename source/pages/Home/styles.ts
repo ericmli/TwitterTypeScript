@@ -55,5 +55,5 @@ export const ContainerLike = styled.TouchableOpacity`
 `
 
 export const ContainerImage = styled.View`
-  max-height: 300px;
+  max-height: 250px;
 `

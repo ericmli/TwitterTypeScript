@@ -6,6 +6,7 @@ interface SizeImage {
 
 export const Image = styled.Image<SizeImage>`
   width: 100%;
-  height: ${(props) => props.size ? '400px' : '200px'};
+  height: 100%;
   border-radius: 10px;
+  
 `

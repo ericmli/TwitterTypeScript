@@ -3,7 +3,7 @@ import { AsideUser, Container, ContainerBody, ContainerImage, ContainerNameUser,
 import { HeaderIcon } from '../../components/HeaderIcon'
 import { Title } from '../../components/Text'
 import { ListRenderItem, RefreshControl } from 'react-native'
-import { formatTimeRange, getUserStorage } from '../../utils'
+import { formatDateWeeks, getUserStorage } from '../../utils'
 import { useNavigation } from '@react-navigation/native'
 import { LoadImage } from '../../components/Image'
 import { BottomPost } from '../../components/BottomPost'
@@ -20,7 +20,7 @@ export function Home() {
   }, [])
 
   async function fetchData() {
-    const data = await loadApi({ route: 'Post', doc: 'idLength', order: 'desc' })
+    const data = await loadApi({ route: 'Post', doc: 'postDate', order: 'desc' })
     setData(data)
     setGetUser(await getUserStorage())
   }
@@ -35,7 +35,7 @@ export function Home() {
         <ContainerBody>
           <ContainerNameUser>
             <Title size='small' color='invertColor' text={item._data.name} />
-            <Title size='xnano' color='invertColor' text={`@${item._data.nick} • ${formatTimeRange(item._data.postDate)}`} />
+            <Title size='xnano' color='invertColor' text={`@${item._data.nick} • ${formatDateWeeks(item._data.postDate)}`} />
           </ContainerNameUser>
           <Title size='small' color='invertColor' text={item._data.textArea} />
 

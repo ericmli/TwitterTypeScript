@@ -5,7 +5,7 @@ import { Input } from '../../components/Input'
 import { useForm } from 'react-hook-form'
 import { useNavigation } from '@react-navigation/native'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
-import { formatDateTime, getUserStorage, loadApi, randomCode } from '../../utils'
+import { getUserStorage, randomCode } from '../../utils'
 import firestore from '@react-native-firebase/firestore'
 import storage from '@react-native-firebase/storage'
 import { Alert } from 'react-native'
@@ -16,7 +16,6 @@ export interface PostFormValues {
 
 export function NewPost() {
   const navigation = useNavigation()
-  const [data, setData] = React.useState<string[]>()
   const [response, setResponse] = React.useState<any>()
   const [user, setUser] = React.useState<any>()
 
@@ -28,8 +27,6 @@ export function NewPost() {
   const userChange = watch('comment')
 
   async function push() {
-    const data = await loadApi()
-    setData(data)
     setUser(await getUserStorage())
   }
   React.useEffect(() => {
@@ -47,7 +44,6 @@ export function NewPost() {
   async function onSubmit(input: PostFormValues) {
     if (userChange.length > 0) {
       try {
-        const length = data?.length
         const imageUri = response?.assets[0].uri
         const imageName = response?.assets[0].fileName
         if (response) {
@@ -55,12 +51,11 @@ export function NewPost() {
         }
         const code = randomCode(30)
         const currentDate = new Date()
-        const time = formatDateTime(currentDate)
         const obj = {
           comments: [],
           id: code,
           like: 0,
-          postDate: time,
+          postDate: currentDate,
           textArea: input.comment,
           user: user.email,
           likeBy: [],
@@ -68,8 +63,7 @@ export function NewPost() {
           name: user.name,
           nick: user.nick,
           photoUser: user.photoUser,
-          liked: false,
-          idLength: length && length + 1
+          liked: false
         }
         firestore().collection('Post').doc(code).set(obj)
         navigation.goBack()
